@@ -4,8 +4,10 @@
 cd ..
 
 # source vars from root directory vars.txt
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/aot-tools
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+
+
 source $PARENT_DIR/vars.txt
 
 # check to see if defined contexts exist
