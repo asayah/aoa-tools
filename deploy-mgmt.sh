@@ -5,7 +5,8 @@ cd ..
 
 # source vars from root directory vars.txt
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-source $SCRIPT_DIR/vars.txt
+PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+source $PARENT_DIR/vars.txt
 
 # check to see if defined contexts exist
 if [[ $(kubectl config get-contexts | grep ${cluster_context}) == "" ]] ; then
@@ -15,7 +16,7 @@ if [[ $(kubectl config get-contexts | grep ${cluster_context}) == "" ]] ; then
 fi
 
 # create license
-$SCRIPT_DIR/aoa-tools/tools/create-license.sh "${LICENSE_KEY}" "${cluster_context}"
+$SCRIPT_DIR/tools/create-license.sh "${LICENSE_KEY}" "${cluster_context}"
 
 # check to see if environment overlay variable was passed through, if not prompt for it
 if [[ ${environment_overlay} == "" ]]
@@ -31,17 +32,17 @@ cd $SCRIPT_DIR/bootstrap-argocd
 cd $SCRIPT_DIR
 
 # wait for argo cluster rollout
-$SCRIPT_DIR/aoa-tools/tools/wait-for-rollout.sh deployment argocd-server argocd 20 ${cluster_context}
+$SCRIPT_DIR/tools/wait-for-rollout.sh deployment argocd-server argocd 20 ${cluster_context}
 
 # deploy app of app waves
-for i in $(ls $SCRIPT_DIR/environment | sort -n); do 
+for i in $(ls $PARENT_DIR/environment | sort -n); do 
   echo "starting ${i}"
   # run init script if it exists
-  [[ -f "$SCRIPT_DIR/environment/${i}/init.sh" ]] && $SCRIPT_DIR/environment/${i}/init.sh 
+  [[ -f "$PARENT_DIR/environment/${i}/init.sh" ]] && $PARENT_DIR/environment/${i}/init.sh 
   # deploy aoa wave
-  $SCRIPT_DIR/aoa-tools/tools/configure-wave.sh ${i} ${environment_overlay} ${cluster_context} ${github_username} ${repo_name} ${target_branch}
+  $SCRIPT_DIR/tools/configure-wave.sh ${i} ${environment_overlay} ${cluster_context} ${github_username} ${repo_name} ${target_branch}
   # run test script if it exists
-  [[ -f "$SCRIPT_DIR/environment/${i}/test.sh" ]] && $SCRIPT_DIR/environment/${i}/test.sh
+  [[ -f "$PARENT_DIR/environment/${i}/test.sh" ]] && $PARENT_DIR/environment/${i}/test.sh
 done
 
 echo "END."
