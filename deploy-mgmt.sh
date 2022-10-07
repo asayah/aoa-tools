@@ -4,7 +4,7 @@
 cd ..
 
 # source vars from root directory vars.txt
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/aot-tools
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/aoa-tools
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
 
 
