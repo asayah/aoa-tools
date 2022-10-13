@@ -1,13 +1,21 @@
 #!/bin/bash
 #set -e
 
-cd ..
+pushd . > '/dev/null';
+SCRIPT_DIR="${BASH_SOURCE[0]:-$0}";
+
+while [ -h "$SCRIPT_DIR" ];
+do
+    cd "$( dirname -- "$SCRIPT_DIR"; )";
+    SCRIPT_DIR="$( readlink -f -- "$SCRIPT_DIR"; )";
+done
+
+cd "$( dirname -- "$SCRIPT_DIR"; )" > '/dev/null';
+SCRIPT_DIR="$( pwd; )";
+popd  > '/dev/null';
 
 # source vars from root directory vars.txt
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/aoa-tools
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
-
-
 source $PARENT_DIR/vars.txt
 
 # check to see if defined contexts exist
