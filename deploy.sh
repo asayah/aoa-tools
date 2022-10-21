@@ -25,8 +25,8 @@ if [[ $(kubectl config get-contexts | grep ${cluster_context}) == "" ]] ; then
   exit 1;
 fi
 
-# create license
-$SCRIPT_DIR/tools/create-license.sh "${LICENSE_KEY}" "${cluster_context}"
+## create license
+#$SCRIPT_DIR/tools/create-license.sh "${LICENSE_KEY}" "${cluster_context}"
 
 # check to see if environment overlay variable was passed through, if not prompt for it
 if [[ ${environment_overlay} == "" ]]
