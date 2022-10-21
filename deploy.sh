@@ -16,7 +16,7 @@ popd  > '/dev/null';
 
 # source vars from root directory vars.txt
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
-source $PARENT_DIR/vars.txt
+source $PARENT_DIR/vars.txt && export $(sed '/^#/d' $PARENT_DIR/vars.txt | cut -d= -f1)
 
 # check to see if defined contexts exist
 if [[ $(kubectl config get-contexts | grep ${cluster_context}) == "" ]] ; then
