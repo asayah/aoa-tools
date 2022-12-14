@@ -25,9 +25,6 @@ if [[ $(kubectl config get-contexts | grep ${cluster_context}) == "" ]] ; then
   exit 1;
 fi
 
-## create license
-#$SCRIPT_DIR/tools/create-license.sh "${LICENSE_KEY}" "${cluster_context}"
-
 # check to see if environment overlay variable was passed through, if not prompt for it
 if [[ ${environment_overlay} == "" ]]
   then
@@ -38,7 +35,11 @@ fi
 
 # install argocd
 cd $SCRIPT_DIR/bootstrap-argocd
-./install-argocd.sh insecure-rootpath ${cluster_context}
+if [ "${environment_overlay}" == "ocp" ] ; then 
+     ./install-argocd.sh insecure-rootpath-ocp ${cluster_context}
+  else
+     ./install-argocd.sh insecure-rootpath ${cluster_context}
+  fi
 cd $SCRIPT_DIR
 
 # wait for argo cluster rollout
